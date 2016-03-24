@@ -92,7 +92,7 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Temperature (ºF)");
+        .text("Temperatur (ºC)");
 
     var city = svg.selectAll(".city")
         .data(tempSensors)
@@ -108,7 +108,7 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
             return color(d.name);
         });
 
-    city.append("text")
+    /*city.append("text")
         .datum(function (d) {
             return {name: d.name, value: d.values[d.values.length - 1]};
         })
@@ -119,5 +119,5 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
         .attr("dy", ".35em")
         .text(function (d) {
             return d.name;
-        });
+        });*/s
 });
