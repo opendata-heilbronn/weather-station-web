@@ -32,7 +32,7 @@
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
-    var parseDate = d3.time.format("%Y%m%d").parse;
+    //var parseDate = d3.time.format.utc().parse;
 
     var x = d3.time.scale()
             .range([0, width]);
@@ -68,30 +68,41 @@
     d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.inside1.temperature,cowo.inside2.temperature&size=99999999", function (error, data) {
         if (error) throw error;
 
-        color.domain(d3.keys(data[0]).filter(function (key) {
-            return key !== "date";
-        }));
+        var sensors = {};
 
-        var cities = color.domain().map(function (name) {
+        data.content.forEach(function(element) {
+            sensors[element.sensorName] = true;
+            element.date = new Date(element.date);
+        });
+
+        color.domain(d3.keys(sensors));
+
+        var tempSensors = color.domain().map(function (name) {
+            var values = [];
+
+            data.content.forEach(function(element) {
+                if (name == element.sensorName) {
+                    values.push({date: element.date, temperature: element.value});
+                }
+            });
+
             return {
                 name: name,
-                values: data.map(function (d) {
-                    return {date: d.date, temperature: +d[name]};
-                })
+                values: values
             };
         });
 
-        x.domain(d3.extent(data, function (d) {
+        x.domain(d3.extent(data.content, function (d) {
             return d.date;
         }));
 
         y.domain([
-            d3.min(cities, function (c) {
+            d3.min(tempSensors, function (c) {
                 return d3.min(c.values, function (v) {
                     return v.temperature;
                 });
             }),
-            d3.max(cities, function (c) {
+            d3.max(tempSensors, function (c) {
                 return d3.max(c.values, function (v) {
                     return v.temperature;
                 });
@@ -114,7 +125,7 @@
                 .text("Temperature (ºF)");
 
         var city = svg.selectAll(".city")
-                .data(cities)
+                .data(tempSensors)
                 .enter().append("g")
                 .attr("class", "city");
 
@@ -127,7 +138,7 @@
                     return color(d.name);
                 });
 
-        city.append("text")
+       city.append("text")
                 .datum(function (d) {
                     return {name: d.name, value: d.values[d.values.length - 1]};
                 })
