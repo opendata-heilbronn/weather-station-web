@@ -23,7 +23,11 @@
 			<div class="collapse navbar-collapse" id="navbar-ex-collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li class="active">
-					<a href="http://coworking-heilbronn.org/"><i class="fa fa-fw text-warning fa-home"></i>Home</a></li>
+						<a href="http://coworking-heilbronn.org/"><i class="fa fa-fw text-warning fa-home"></i>Home</a>
+					</li>
+					<li>
+						<a href="#statistik">Statistiken</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -78,7 +82,7 @@
 		</div>
 	</div>
 	<hr>
-	<div class="section">
+	<div class="section" id="statistik">
 		<div class="container">
 			<div class="row" style="margin-bottom: 20px">
 				<h2 class="text-center">Statistiken</h2>
@@ -90,6 +94,7 @@
 			</div>
 		</div>
 	</div>
+	<hr>
 	<center>
 		Made with <i class="fa fa-heart"></i> by <a href="https://github.com/opendata-heilbronn/weather-station-web">Opendata Heilbronn <i class="fa fa-github"></i></a>
 	</center>
@@ -269,10 +274,14 @@
 		request.send();
 	}
     
-    NewValueNorth();
-    NewValueSouth();
-    NewValueOutside();
-	NewValueInsideHumidity();
-	NewValueOutsideHumidity();
+	function updateValues(){
+		NewValueNorth();
+		NewValueSouth();
+		NewValueOutside();
+		NewValueInsideHumidity();
+		NewValueOutsideHumidity();
+	}
+	updateValues();
+	setTimeout(updateValues, 1000 * 60 * 3);
 </script>
 </body></html>
