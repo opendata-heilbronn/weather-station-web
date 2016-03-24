@@ -23,7 +23,11 @@
 			<div class="collapse navbar-collapse" id="navbar-ex-collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li class="active">
-					<a href="http://coworking-heilbronn.org/"><i class="fa fa-fw text-warning fa-home"></i>Home</a></li>
+						<a href="http://coworking-heilbronn.org/"><i class="fa fa-fw text-warning fa-home"></i>Home</a>
+					</li>
+					<li>
+						<a href="#statistik">Statistiken</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -67,16 +71,18 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<p class="text-center">gerade keine Daten</p>
+					<svg id="sensorInsideHumidityGauge" width="97%" height="200" onclick="NewValueInsideHumidity();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
 				</div>
 				<div class="col-md-6">
-					<p class="text-center">gerade keine Daten</p>
+					<svg id="sensorOutsideHumidityGauge" width="97%" height="200" onclick="NewValueOutsideHumidity();"></svg>
+					<h3 style="font-family: 'PT Mono';" class="text-center">Außen</h3>
 				</div>
 			</div>
 		</div>
 	</div>
 	<hr>
-	<div class="section">
+	<div class="section" id="statistik">
 		<div class="container">
 			<div class="row" style="margin-bottom: 20px">
 				<h2 class="text-center">Statistiken</h2>
@@ -88,6 +94,10 @@
 			</div>
 		</div>
 	</div>
+	<hr>
+	<center>
+		Made with <i class="fa fa-heart"></i> by <a href="https://github.com/opendata-heilbronn/weather-station-web">Opendata Heilbronn <i class="fa fa-github"></i></a>
+	</center>
 
 <script language="JavaScript">
 
@@ -102,6 +112,7 @@
     northConfig.textVertPosition = 0.8;
     northConfig.waveAnimateTime = 1200;
     northConfig.waveHeight = 0.08;
+    northConfig.displayPercent = false;
     var northGauge= loadLiquidFillGauge("sensorNorthGauge", 0.0, northConfig);
     
     function NewValueNorth(){
@@ -136,6 +147,7 @@
     southConfig.textVertPosition = 0.8;
     southConfig.waveAnimateTime = 1200;
     southConfig.waveHeight = 0.08;
+    southConfig.displayPercent = false;
     var southGauge= loadLiquidFillGauge("sensorSouthGauge", 0.0, southConfig);
     
     function NewValueSouth(){
@@ -170,6 +182,7 @@
     outsideConfig.textVertPosition = 0.8;
     outsideConfig.waveAnimateTime = 1200;
     outsideConfig.waveHeight = 0.08;
+    outsideConfig.displayPercent = false;
     var outsideGauge= loadLiquidFillGauge("sensorOutsideGauge", 0.0, outsideConfig);
     
     function NewValueOutside(){
@@ -194,8 +207,81 @@
     }
 
     
-    NewValueNorth();
-    NewValueSouth();
-    NewValueOutside();
+    // SENSOR INSIDE HUMIDITY
+    var insideHumidityConfig = liquidFillGaugeDefaultSettings();
+	insideHumidityConfig.circleColor = "#6EA164";
+	insideHumidityConfig.textColor = "";
+	insideHumidityConfig.waveTextColor = "#5EB3DA";
+	insideHumidityConfig.waveColor = "#5EB3DA";
+	insideHumidityConfig.circleThickness = 0.1;
+	insideHumidityConfig.circleFillGap = 0.2;
+	insideHumidityConfig.textVertPosition = 0.8;
+	insideHumidityConfig.waveAnimateTime = 1100;
+	insideHumidityConfig.waveHeight = 0.12;
+    var insideHumidityGauge= loadLiquidFillGauge("sensorInsideHumidityGauge", 0.0, insideHumidityConfig);
+    
+    function NewValueInsideHumidity(){
+        var request = new XMLHttpRequest();
+		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside2.humidity&size=1', true);
+	
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) {
+				var data = JSON.parse(request.responseText);
+				var sensorValue = data.content[0].value;
+				insideHumidityGauge.update(sensorValue);
+			} else {
+				
+			}	
+		};
+
+		request.onerror = function() {
+		};
+
+		request.send();
+    }
+
+
+	// SENSOR OUTSIDE HUMIDITY
+	var outsideHumidityConfig = liquidFillGaugeDefaultSettings();
+	outsideHumidityConfig.circleColor = "#6EA164";
+	outsideHumidityConfig.textColor = "";
+	outsideHumidityConfig.waveTextColor = "#5EB3DA";
+	outsideHumidityConfig.waveColor = "#5EB3DA";
+	outsideHumidityConfig.circleThickness = 0.1;
+	outsideHumidityConfig.circleFillGap = 0.2;
+	outsideHumidityConfig.textVertPosition = 0.8;
+	outsideHumidityConfig.waveAnimateTime = 1100;
+	outsideHumidityConfig.waveHeight = 0.12;
+	var outsideHumidityGauge= loadLiquidFillGauge("sensorOutsideHumidityGauge", 0.0, outsideHumidityConfig);
+
+	function NewValueOutsideHumidity(){
+		var request = new XMLHttpRequest();
+		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.outside.humidity&size=1', true);
+
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) {
+				var data = JSON.parse(request.responseText);
+				var sensorValue = data.content[0].value;
+				outsideHumidityGauge.update(sensorValue);
+			} else {
+
+			}
+		};
+
+		request.onerror = function() {
+		};
+
+		request.send();
+	}
+    
+	function updateValues(){
+		NewValueNorth();
+		NewValueSouth();
+		NewValueOutside();
+		NewValueInsideHumidity();
+		NewValueOutsideHumidity();
+	}
+	updateValues();
+	setTimeout(updateValues, 1000 * 60 * 3);
 </script>
 </body></html>
