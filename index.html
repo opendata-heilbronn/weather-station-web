@@ -67,11 +67,11 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<svg id="sensorInsideHumidityGauge" width="97%" height="250" onclick="NewValueInsideHumidity();"></svg>
+					<svg id="sensorInsideHumidityGauge" width="97%" height="200" onclick="NewValueInsideHumidity();"></svg>
 					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
 				</div>
 				<div class="col-md-6">
-					<svg id="sensorOutsideHumidityGauge" width="97%" height="250" onclick="NewValueOutsideHumidity();"></svg>
+					<svg id="sensorOutsideHumidityGauge" width="97%" height="200" onclick="NewValueOutsideHumidity();"></svg>
 					<h3 style="font-family: 'PT Mono';" class="text-center">Außen</h3>
 				</div>
 			</div>
@@ -201,15 +201,15 @@
     
     // SENSOR INSIDE HUMIDITY
     var insideHumidityConfig = liquidFillGaugeDefaultSettings();
-	insideHumidityConfig.circleColor = "#5DCFDC";
+	insideHumidityConfig.circleColor = "#6EA164";
 	insideHumidityConfig.textColor = "";
-	insideHumidityConfig.waveTextColor = "#FFAAAA";
-	insideHumidityConfig.waveColor = "#DADC5D";
+	insideHumidityConfig.waveTextColor = "#5EB3DA";
+	insideHumidityConfig.waveColor = "#5EB3DA";
 	insideHumidityConfig.circleThickness = 0.1;
 	insideHumidityConfig.circleFillGap = 0.2;
 	insideHumidityConfig.textVertPosition = 0.8;
-	insideHumidityConfig.waveAnimateTime = 1200;
-	insideHumidityConfig.waveHeight = 0.08;
+	insideHumidityConfig.waveAnimateTime = 1100;
+	insideHumidityConfig.waveHeight = 0.12;
     var insideHumidityGauge= loadLiquidFillGauge("sensorInsideHumidityGauge", 0.0, insideHumidityConfig);
     
     function NewValueInsideHumidity(){
@@ -233,17 +233,17 @@
     }
 
 
-	// SENSOR INSIDE HUMIDITY
+	// SENSOR OUTSIDE HUMIDITY
 	var outsideHumidityConfig = liquidFillGaugeDefaultSettings();
-	outsideHumidityConfig.circleColor = "#5DCFDC";
+	outsideHumidityConfig.circleColor = "#6EA164";
 	outsideHumidityConfig.textColor = "";
-	outsideHumidityConfig.waveTextColor = "#FFAAAA";
-	outsideHumidityConfig.waveColor = "#DADC5D";
+	outsideHumidityConfig.waveTextColor = "#5EB3DA";
+	outsideHumidityConfig.waveColor = "#5EB3DA";
 	outsideHumidityConfig.circleThickness = 0.1;
 	outsideHumidityConfig.circleFillGap = 0.2;
 	outsideHumidityConfig.textVertPosition = 0.8;
-	outsideHumidityConfig.waveAnimateTime = 1200;
-	outsideHumidityConfig.waveHeight = 0.08;
+	outsideHumidityConfig.waveAnimateTime = 1100;
+	outsideHumidityConfig.waveHeight = 0.12;
 	var outsideHumidityGauge= loadLiquidFillGauge("sensorOutsideHumidityGauge", 0.0, outsideHumidityConfig);
 
 	function NewValueOutsideHumidity(){
