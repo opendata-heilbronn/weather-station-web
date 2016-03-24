@@ -67,10 +67,12 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<p class="text-center">gerade keine Daten</p>
+					<svg id="sensorInsideHumidityGauge" width="97%" height="250" onclick="NewValueInsideHumidity();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
 				</div>
 				<div class="col-md-6">
-					<p class="text-center">gerade keine Daten</p>
+					<svg id="sensorOutsideHumidityGauge" width="97%" height="250" onclick="NewValueOutsideHumidity();"></svg>
+					<h3 style="font-family: 'PT Mono';" class="text-center">Außen</h3>
 				</div>
 			</div>
 		</div>
@@ -102,6 +104,7 @@
     northConfig.textVertPosition = 0.8;
     northConfig.waveAnimateTime = 1200;
     northConfig.waveHeight = 0.08;
+    northConfig.displayPercent = false;
     var northGauge= loadLiquidFillGauge("sensorNorthGauge", 0.0, northConfig);
     
     function NewValueNorth(){
@@ -136,6 +139,7 @@
     southConfig.textVertPosition = 0.8;
     southConfig.waveAnimateTime = 1200;
     southConfig.waveHeight = 0.08;
+    southConfig.displayPercent = false;
     var southGauge= loadLiquidFillGauge("sensorSouthGauge", 0.0, southConfig);
     
     function NewValueSouth(){
@@ -170,6 +174,7 @@
     outsideConfig.textVertPosition = 0.8;
     outsideConfig.waveAnimateTime = 1200;
     outsideConfig.waveHeight = 0.08;
+    outsideConfig.displayPercent = false;
     var outsideGauge= loadLiquidFillGauge("sensorOutsideGauge", 0.0, outsideConfig);
     
     function NewValueOutside(){
@@ -194,8 +199,77 @@
     }
 
     
+    // SENSOR INSIDE HUMIDITY
+    var insideHumidityConfig = liquidFillGaugeDefaultSettings();
+	insideHumidityConfig.circleColor = "#5DCFDC";
+	insideHumidityConfig.textColor = "";
+	insideHumidityConfig.waveTextColor = "#FFAAAA";
+	insideHumidityConfig.waveColor = "#DADC5D";
+	insideHumidityConfig.circleThickness = 0.1;
+	insideHumidityConfig.circleFillGap = 0.2;
+	insideHumidityConfig.textVertPosition = 0.8;
+	insideHumidityConfig.waveAnimateTime = 1200;
+	insideHumidityConfig.waveHeight = 0.08;
+    var insideHumidityGauge= loadLiquidFillGauge("sensorInsideHumidityGauge", 0.0, insideHumidityConfig);
+    
+    function NewValueInsideHumidity(){
+        var request = new XMLHttpRequest();
+		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside2.humidity&size=1', true);
+	
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) {
+				var data = JSON.parse(request.responseText);
+				var sensorValue = data.content[0].value;
+				insideHumidityGauge.update(sensorValue);
+			} else {
+				
+			}	
+		};
+
+		request.onerror = function() {
+		};
+
+		request.send();
+    }
+
+
+	// SENSOR INSIDE HUMIDITY
+	var outsideHumidityConfig = liquidFillGaugeDefaultSettings();
+	outsideHumidityConfig.circleColor = "#5DCFDC";
+	outsideHumidityConfig.textColor = "";
+	outsideHumidityConfig.waveTextColor = "#FFAAAA";
+	outsideHumidityConfig.waveColor = "#DADC5D";
+	outsideHumidityConfig.circleThickness = 0.1;
+	outsideHumidityConfig.circleFillGap = 0.2;
+	outsideHumidityConfig.textVertPosition = 0.8;
+	outsideHumidityConfig.waveAnimateTime = 1200;
+	outsideHumidityConfig.waveHeight = 0.08;
+	var outsideHumidityGauge= loadLiquidFillGauge("sensorOutsideHumidityGauge", 0.0, outsideHumidityConfig);
+
+	function NewValueOutsideHumidity(){
+		var request = new XMLHttpRequest();
+		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.outside.humidity&size=1', true);
+
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) {
+				var data = JSON.parse(request.responseText);
+				var sensorValue = data.content[0].value;
+				outsideHumidityGauge.update(sensorValue);
+			} else {
+
+			}
+		};
+
+		request.onerror = function() {
+		};
+
+		request.send();
+	}
+    
     NewValueNorth();
     NewValueSouth();
     NewValueOutside();
+	NewValueInsideHumidity();
+	NewValueOutsideHumidity();
 </script>
 </body></html>
