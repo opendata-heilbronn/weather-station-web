@@ -9,6 +9,20 @@
 		<script src="liquidFillGauge.js" language="JavaScript"></script>
 		<style>
 			.liquidFillGaugeText { font-size: 34px; }
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #000;
+				shape-rendering: crispEdges;
+			}
+
+			.line {
+				fill: none;
+				stroke: steelblue;
+				stroke-width: 1.5px;
+			}
+
 		</style>
     </head><body>
 
@@ -88,8 +102,7 @@
 				<h2 class="text-center">Statistiken</h2>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<p style="font-size: 300px" class="text-center"><i class="fa fa-bar-chart"></i></p>
+				<div id="stats" class="col-md-12">
 				</div>
 			</div>
 		</div>
@@ -284,4 +297,5 @@
 	updateValues();
 	setTimeout(updateValues, 1000 * 60 * 3);
 </script>
+<script src="script.js"></script>
 </body></html>
