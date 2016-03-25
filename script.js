@@ -1,6 +1,8 @@
 var margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    totalWidth = 960,
+    totalHeight = 500,
+    width = totalWidth - margin.left - margin.right,
+    height = totalHeight - margin.top - margin.bottom;
 
 //var parseDate = d3.time.format.utc().parse;
 
@@ -30,8 +32,10 @@ var line = d3.svg.line()
     });
 
 var svg = d3.select("#stats").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", totalWidth)
+    .attr("height", totalHeight)
+    .attr("style", "max-width:100%")
+    .attr("viewBox", "0,0," + totalWidth + "," + totalHeight)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
