@@ -119,5 +119,5 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
         .attr("dy", ".35em")
         .text(function (d) {
             return d.name;
-        });*/s
+        });*/
 });
