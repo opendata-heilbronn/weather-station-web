@@ -5,7 +5,7 @@
         <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="bootstrap.css" rel="stylesheet" type="text/css">
-        <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+        <script src="d3.v3.min.js" language="JavaScript"></script>
 		<script src="liquidFillGauge.js" language="JavaScript"></script>
 		<style>
 			.liquidFillGaugeText { font-size: 34px; }
@@ -117,11 +117,13 @@
 
 <script language="JavaScript">
 
+	var textColor = "#3B3B3B";
+	
 	// SENSOR NORTH
     var northConfig = liquidFillGaugeDefaultSettings();
     northConfig.circleColor = "#5DCFDC";
-    northConfig.textColor = "";
-    northConfig.waveTextColor = "#FFAAAA";
+    northConfig.textColor = textColor;
+    northConfig.waveTextColor = textColor;
     northConfig.waveColor = "#DADC5D";
     northConfig.circleThickness = 0.1;
     northConfig.circleFillGap = 0.2;
@@ -155,8 +157,8 @@
     // SENSOR SOUTH
     var southConfig = liquidFillGaugeDefaultSettings();
     southConfig.circleColor = "#5DCFDC";
-    southConfig.textColor = "";
-    southConfig.waveTextColor = "#FFAAAA";
+    southConfig.textColor = textColor;
+    southConfig.waveTextColor = textColor;
     southConfig.waveColor = "#DADC5D";
     southConfig.circleThickness = 0.1;
     southConfig.circleFillGap = 0.2;
@@ -190,8 +192,8 @@
     // SENSOR OUTSIDE
     var outsideConfig = liquidFillGaugeDefaultSettings();
     outsideConfig.circleColor = "#5DCFDC";
-    outsideConfig.textColor = "";
-    outsideConfig.waveTextColor = "#FFAAAA";
+    outsideConfig.textColor = textColor;
+    outsideConfig.waveTextColor = textColor;
     outsideConfig.waveColor = "#DADC5D";
     outsideConfig.circleThickness = 0.1;
     outsideConfig.circleFillGap = 0.2;
@@ -226,8 +228,8 @@
     // SENSOR INSIDE HUMIDITY
     var insideHumidityConfig = liquidFillGaugeDefaultSettings();
 	insideHumidityConfig.circleColor = "#6EA164";
-	insideHumidityConfig.textColor = "";
-	insideHumidityConfig.waveTextColor = "#5EB3DA";
+	insideHumidityConfig.textColor = textColor;
+	insideHumidityConfig.waveTextColor = textColor;
 	insideHumidityConfig.waveColor = "#5EB3DA";
 	insideHumidityConfig.circleThickness = 0.1;
 	insideHumidityConfig.circleFillGap = 0.2;
@@ -260,8 +262,8 @@
 	// SENSOR OUTSIDE HUMIDITY
 	var outsideHumidityConfig = liquidFillGaugeDefaultSettings();
 	outsideHumidityConfig.circleColor = "#6EA164";
-	outsideHumidityConfig.textColor = "";
-	outsideHumidityConfig.waveTextColor = "#5EB3DA";
+	outsideHumidityConfig.textColor = textColor;
+	outsideHumidityConfig.waveTextColor = textColor;
 	outsideHumidityConfig.waveColor = "#5EB3DA";
 	outsideHumidityConfig.circleThickness = 0.1;
 	outsideHumidityConfig.circleFillGap = 0.2;
