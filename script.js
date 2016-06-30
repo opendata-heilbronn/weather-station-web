@@ -1,4 +1,4 @@
-var margin = {top: 20, right: 80, bottom: 30, left: 50},
+var margin = { top: 20, right: 80, bottom: 30, left: 50 },
     totalWidth = 960,
     totalHeight = 500,
     width = totalWidth - margin.left - margin.right,
@@ -46,7 +46,7 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
 
     var sensors = {};
 
-    data.content.forEach(function(element) {
+    data.content.forEach(function (element) {
         sensors[element.sensorName] = true;
         element.date = new Date(element.date);
     });
@@ -56,9 +56,9 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
     var tempSensors = color.domain().map(function (name) {
         var values = [];
 
-        data.content.forEach(function(element) {
+        data.content.forEach(function (element) {
             if (name == element.sensorName) {
-                values.push({date: element.date, temperature: element.value});
+                values.push({ date: element.date, temperature: element.value });
             }
         });
 
@@ -114,16 +114,19 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
             return color(d.name);
         });
 
-    /*city.append("text")
-        .datum(function (d) {
-            return {name: d.name, value: d.values[d.values.length - 1]};
-        })
-        .attr("transform", function (d) {
-            return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")";
-        })
+var sensorMapping = {
+    "cowo.inside2.temperature" : "Innen Nord",
+    "cowo.inside1.temperature" : "Innen Süd",
+    "cowo.outside.temperature" : "Außen"
+}
+
+city.append("text")
+        .datum(function (d) { return { name: d.name, value: d.values[0] }; })
+        .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
         .attr("x", 3)
         .attr("dy", ".35em")
-        .text(function (d) {
-            return d.name;
-        });*/
+        .text(function (d) { return sensorMapping[d.name]; });
+
+
+
 });
