@@ -85,13 +85,9 @@
 				<h2 class="text-center">Luftfeuchtigkeit</h2>
 			</div>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<svg id="sensorInsideHumidityGauge" width="97%" height="200" onclick="NewValueInsideHumidity();"></svg>
 					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
-				</div>
-				<div class="col-md-6">
-					<svg id="sensorOutsideHumidityGauge" width="97%" height="200" onclick="NewValueOutsideHumidity();"></svg>
-					<h3 style="font-family: 'PT Mono';" class="text-center">Außen</h3>
 				</div>
 			</div>
 		</div>
@@ -100,10 +96,32 @@
 	<div class="section" id="statistik">
 		<div class="container">
 			<div class="row" style="margin-bottom: 20px">
-				<h2 class="text-center">Statistiken <small>(letzte Woche)</small></h2>
+				<h2 class="text-center">Temperatur-Statistiken <small>(letzte Woche)</small></h2>
 			</div>
 			<div class="row">
 				<div id="stats" class="col-md-12">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="section" id="dust-statistik">
+		<div class="container">
+			<div class="row" style="margin-bottom: 20px">
+				<h2 class="text-center">Staub-Statistiken <small>(letzte Woche)</small></h2>
+			</div>
+			<div class="row">
+				<div id="duststats" class="col-md-12">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="section" id="humidity-statistik">
+		<div class="container">
+			<div class="row" style="margin-bottom: 20px">
+				<h2 class="text-center">Luftfeuchtigkeit-Statistiken <small>(letzte Woche)</small></h2>
+			</div>
+			<div class="row">
+				<div id="humiditystats" class="col-md-12">
 				</div>
 			</div>
 		</div>
@@ -238,7 +256,7 @@
     
     function NewValueInsideHumidity(){
         var request = new XMLHttpRequest();
-		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside2.humidity&size=1', true);
+		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside3.humidity&size=1', true);
 	
 		request.onload = function() {
 			if (request.status >= 200 && request.status < 400) {
@@ -256,49 +274,16 @@
 		request.send();
     }
 
-
-	// SENSOR OUTSIDE HUMIDITY
-	var outsideHumidityConfig = liquidFillGaugeDefaultSettings();
-	outsideHumidityConfig.circleColor = "#6EA164";
-	outsideHumidityConfig.textColor = textColor;
-	outsideHumidityConfig.waveTextColor = textColor;
-	outsideHumidityConfig.waveColor = "#5EB3DA";
-	outsideHumidityConfig.circleThickness = 0.1;
-	outsideHumidityConfig.circleFillGap = 0.2;
-	outsideHumidityConfig.textVertPosition = 0.8;
-	outsideHumidityConfig.waveAnimateTime = 1100;
-	outsideHumidityConfig.waveHeight = 0.12;
-	var outsideHumidityGauge= loadLiquidFillGauge("sensorOutsideHumidityGauge", 0.0, outsideHumidityConfig);
-
-	function NewValueOutsideHumidity(){
-		var request = new XMLHttpRequest();
-		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.outside.humidity&size=1', true);
-
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) {
-				var data = JSON.parse(request.responseText);
-				var sensorValue = data.content[0].value;
-				outsideHumidityGauge.update(sensorValue);
-			} else {
-
-			}
-		};
-
-		request.onerror = function() {
-		};
-
-		request.send();
-	}
-    
 	function updateValues(){
 		NewValueNorth();
 		NewValueSouth();
 		NewValueOutside();
 		NewValueInsideHumidity();
-		NewValueOutsideHumidity();
 	}
 	updateValues();
 	setTimeout(updateValues, 1000 * 60 * 3);
 </script>
 <script src="script.js"></script>
+<script src="script-dust.js"></script>
+<script src="script-humidity.js"></script>
 </body></html>
