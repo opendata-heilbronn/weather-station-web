@@ -32,7 +32,7 @@ var line = d3.svg.line()
         return y(d.temperature);
     });
 
-var svg = d3.select("#duststats").append("svg")
+var svg = d3.select("#duststatstoday").append("svg")
     .attr("width", totalWidth)
     .attr("height", totalHeight)
     .attr("style", "max-width:100%")
@@ -40,9 +40,12 @@ var svg = d3.select("#duststats").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-
-d3.json("http://api.grundid.de/sensor?sensorName=cowo.inside.dust&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
+	alert(moment().subtract(day,"days"));
+for(var day=0;day<7;day++){
+	var fromtime=moment().subtract(day,"days").startOf('day').format('x');
+	var totime=moment().subtract(day,"days").endOf('day').format('x');
+	alert("http://api.grundid.de/sensor?sensorName=cowo.inside.dust&size=99999999&from=" + fromtime+"&to="+totime);
+d3.json("http://api.grundid.de/sensor?sensorName=cowo.inside.dust&size=99999999&from=" + fromtime+"&to="+totime, function (error, data) {
     if (error) throw error;
 
     var sensors = {};
@@ -131,5 +134,5 @@ city.append("text")
 
 
 });
-}
+}}
 dustStatistics();
