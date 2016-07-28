@@ -127,6 +127,13 @@ city.append("text")
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function (d) { return sensorMapping[d.name]; });
+		
+
+  legend = svg.append("g")
+    .attr("class","legend")
+    .attr("transform","translate(50,30)")
+    .style("font-size","12px")
+    .call(d3.legend)
 
 
 
