@@ -66,14 +66,17 @@
 				<div class="col-md-4">
 					<svg id="sensorOutsideGauge" width="97%" height="250" onclick="NewValueOutside();"></svg>
 					<h3 style="font-family: PT Mono" class="text-center">Außen</h3>
+					<div id="sensorOutsideLastUpdate" class="text-center"></div>
 				</div>
 				<div class="col-md-4">
 					<svg id="sensorSouthGauge" width="97%" height="250" onclick="NewValueSouth();"></svg>
 					<h3 style="font-family: PT Mono" class="text-center">Innen (Süd)</h3>
+					<div id="sensorSouthLastUpdate" class="text-center"></div>
 				</div>
 				<div class="col-md-4">
 					<svg id="sensorNorthGauge" width="97%" height="250" onclick="NewValueNorth();"></svg>
 					<h3 style="font-family: PT Mono" class="text-center">Innen (Nord)</h3>
+					<div id="sensorNorthLastUpdate" class="text-center"></div>
 				</div>
 			</div>
 		</div>
@@ -88,6 +91,7 @@
 				<div class="col-md-12">
 					<svg id="sensorInsideHumidityGauge" width="97%" height="200" onclick="NewValueInsideHumidity();"></svg>
 					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
+					<div id="sensorHumidityLastUpdate" class="text-center"></div>
 				</div>
 			</div>
 		</div>
@@ -169,6 +173,7 @@
 				var data = JSON.parse(request.responseText);
 				var sensorValue = data.content[0].value;
 				northGauge.update(sensorValue);
+				$('#sensorNorthLastUpdate').text(moment(data.content[0].date).format('LLLL'));
 			} else {
 				
 			}	
@@ -204,6 +209,7 @@
 				var data = JSON.parse(request.responseText);
 				var sensorValue = data.content[0].value;
 				southGauge.update(sensorValue);
+				$('#sensorSouthLastUpdate').text(moment(data.content[0].date).format('LLLL'));
 			} else {
 				
 			}	
@@ -239,6 +245,8 @@
 				var data = JSON.parse(request.responseText);
 				var sensorValue = data.content[0].value;
 				outsideGauge.update(sensorValue);
+				$('#sensorOutsideLastUpdate').text(moment(data.content[0].date).format('LLLL'));
+
 			} else {
 				
 			}	
@@ -274,6 +282,8 @@
 				var data = JSON.parse(request.responseText);
 				var sensorValue = data.content[0].value;
 				insideHumidityGauge.update(sensorValue);
+				$('#sensorHumidityLastUpdate').text(moment(data.content[0].date).format('LLLL'));
+
 			} else {
 				
 			}	
