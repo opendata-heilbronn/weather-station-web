@@ -3,11 +3,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/locale/de.js"></script>
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="bootstrap.css" rel="stylesheet" type="text/css">
         <script src="d3.v3.min.js" language="JavaScript"></script>
 		<script src="liquidFillGauge.js" language="JavaScript"></script>
-		<script src="moment.js" language="JavaScript"></script>
 		<style>
 			.liquidFillGaugeText { font-size: 34px; }
 
@@ -80,7 +81,7 @@
 				</div>
 				<div class="col-md-3">
 					<svg id="sensorTemperatureGauge" width="97%" height="250" onclick="NewValueTempSensor();"></svg>
-					<h3 style="font-family: PT Mono" class="text-center">Innen (Station)</h3>
+					<h3 style="font-family: PT Mono" class="text-center">Station</h3>
 					<div id="sensorTemperatureLastUpdate" class="text-center"></div>
 				</div>
 			</div>
@@ -100,7 +101,7 @@
 				</div>
 				<div class="col-md-6">
 					<svg id="sensorOutsideHumidityGauge" width="97%" height="200" onclick="NewValueOutsideHumidity();"></svg>
-					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Außen</h3>
 					<div id="sensorOutsideHumidityLastUpdate" class="text-center"></div>
 				</div>
 			</div>
@@ -157,12 +158,13 @@
 	</center>
 
 <script language="JavaScript">
+	moment.locale('de');
 
 	function updateSensorDisplay(sensorName, gauge, element){
 		$.getJSON('http://api.grundid.de/sensor?size=1&sensorName='+sensorName, null,  function(data){
 			var sensorValue = data.content[0].value;
 			gauge.update(sensorValue);
-			element.text(moment(data.content[0].date).format('LLLL'));
+			element.text(moment(data.content[0].date).format('llll'));
 		});
 	}
 
