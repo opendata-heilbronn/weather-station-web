@@ -63,20 +63,25 @@
 				<h2 class="text-center">Temperaturen</h2>
 			</div>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<svg id="sensorOutsideGauge" width="97%" height="250" onclick="NewValueOutside();"></svg>
 					<h3 style="font-family: PT Mono" class="text-center">Außen</h3>
 					<div id="sensorOutsideLastUpdate" class="text-center"></div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<svg id="sensorSouthGauge" width="97%" height="250" onclick="NewValueSouth();"></svg>
 					<h3 style="font-family: PT Mono" class="text-center">Innen (Süd)</h3>
 					<div id="sensorSouthLastUpdate" class="text-center"></div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<svg id="sensorNorthGauge" width="97%" height="250" onclick="NewValueNorth();"></svg>
 					<h3 style="font-family: PT Mono" class="text-center">Innen (Nord)</h3>
 					<div id="sensorNorthLastUpdate" class="text-center"></div>
+				</div>
+				<div class="col-md-3">
+					<svg id="sensorTemperatureGauge" width="97%" height="250" onclick="NewValueTempSensor();"></svg>
+					<h3 style="font-family: PT Mono" class="text-center">Innen (Station)</h3>
+					<div id="sensorTemperatureLastUpdate" class="text-center"></div>
 				</div>
 			</div>
 		</div>
@@ -88,10 +93,15 @@
 				<h2 class="text-center">Luftfeuchtigkeit</h2>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-6">
 					<svg id="sensorInsideHumidityGauge" width="97%" height="200" onclick="NewValueInsideHumidity();"></svg>
 					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
 					<div id="sensorHumidityLastUpdate" class="text-center"></div>
+				</div>
+				<div class="col-md-6">
+					<svg id="sensorOutsideHumidityGauge" width="97%" height="200" onclick="NewValueOutsideHumidity();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
+					<div id="sensorOutsideHumidityLastUpdate" class="text-center"></div>
 				</div>
 			</div>
 		</div>
@@ -148,158 +158,84 @@
 
 <script language="JavaScript">
 
+	function updateSensorDisplay(sensorName, gauge, element){
+		$.getJSON('http://api.grundid.de/sensor?size=1&sensorName='+sensorName, null,  function(data){
+			var sensorValue = data.content[0].value;
+			gauge.update(sensorValue);
+			element.text(moment(data.content[0].date).format('LLLL'));
+		});
+	}
+
 	var textColor = "#3B3B3B";
-	
+
+	function createGaugeConfig(circleColor, waveColor, displayPercent) {
+		var gaugeConfig = liquidFillGaugeDefaultSettings();
+		gaugeConfig.circleColor = circleColor;
+		gaugeConfig.textColor = textColor;
+		gaugeConfig.waveTextColor = textColor;
+		gaugeConfig.waveColor = waveColor;
+		gaugeConfig.circleThickness = 0.1;
+		gaugeConfig.circleFillGap = 0.2;
+		gaugeConfig.textVertPosition = 0.8;
+		gaugeConfig.waveAnimateTime = 1200;
+		gaugeConfig.waveHeight = 0.08;
+		gaugeConfig.displayPercent = displayPercent;
+		return gaugeConfig;
+	}
+
 	// SENSOR NORTH
-    var northConfig = liquidFillGaugeDefaultSettings();
-    northConfig.circleColor = "#5DCFDC";
-    northConfig.textColor = textColor;
-    northConfig.waveTextColor = textColor;
-    northConfig.waveColor = "#DADC5D";
-    northConfig.circleThickness = 0.1;
-    northConfig.circleFillGap = 0.2;
-    northConfig.textVertPosition = 0.8;
-    northConfig.waveAnimateTime = 1200;
-    northConfig.waveHeight = 0.08;
-    northConfig.displayPercent = false;
+    var northConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
     var northGauge= loadLiquidFillGauge("sensorNorthGauge", 0.0, northConfig);
-    
-    function NewValueNorth(){
-        var request = new XMLHttpRequest();
-		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside2.temperature&size=1', true);
-	
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) {
-				var data = JSON.parse(request.responseText);
-				var sensorValue = data.content[0].value;
-				northGauge.update(sensorValue);
-				$('#sensorNorthLastUpdate').text(moment(data.content[0].date).format('LLLL'));
-			} else {
-				
-			}	
-		};
-
-		request.onerror = function() {
-		};
-
-		request.send();
-
+	function NewValueNorth(){
+		updateSensorDisplay("cowo.inside2.temperature", northGauge, $('#sensorNorthLastUpdate'));
     }
-
     // SENSOR SOUTH
-    var southConfig = liquidFillGaugeDefaultSettings();
-    southConfig.circleColor = "#5DCFDC";
-    southConfig.textColor = textColor;
-    southConfig.waveTextColor = textColor;
-    southConfig.waveColor = "#DADC5D";
-    southConfig.circleThickness = 0.1;
-    southConfig.circleFillGap = 0.2;
-    southConfig.textVertPosition = 0.8;
-    southConfig.waveAnimateTime = 1200;
-    southConfig.waveHeight = 0.08;
-    southConfig.displayPercent = false;
+    var southConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
     var southGauge= loadLiquidFillGauge("sensorSouthGauge", 0.0, southConfig);
-    
     function NewValueSouth(){
-        var request = new XMLHttpRequest();
-		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside1.temperature&size=1', true);
-	
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) {
-				var data = JSON.parse(request.responseText);
-				var sensorValue = data.content[0].value;
-				southGauge.update(sensorValue);
-				$('#sensorSouthLastUpdate').text(moment(data.content[0].date).format('LLLL'));
-			} else {
-				
-			}	
-		};
-
-		request.onerror = function() {
-		};
-
-		request.send();
-
+		updateSensorDisplay("cowo.inside1.temperature", southGauge, $('#sensorSouthLastUpdate'));
     }
 
     // SENSOR OUTSIDE
-    var outsideConfig = liquidFillGaugeDefaultSettings();
-    outsideConfig.circleColor = "#5DCFDC";
-    outsideConfig.textColor = textColor;
-    outsideConfig.waveTextColor = textColor;
-    outsideConfig.waveColor = "#DADC5D";
-    outsideConfig.circleThickness = 0.1;
-    outsideConfig.circleFillGap = 0.2;
-    outsideConfig.textVertPosition = 0.8;
-    outsideConfig.waveAnimateTime = 1200;
-    outsideConfig.waveHeight = 0.08;
-    outsideConfig.displayPercent = false;
+    var outsideConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
     var outsideGauge= loadLiquidFillGauge("sensorOutsideGauge", 0.0, outsideConfig);
-    
     function NewValueOutside(){
-        var request = new XMLHttpRequest();
-		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.outside.temperature&size=1', true);
-	
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) {
-				var data = JSON.parse(request.responseText);
-				var sensorValue = data.content[0].value;
-				outsideGauge.update(sensorValue);
-				$('#sensorOutsideLastUpdate').text(moment(data.content[0].date).format('LLLL'));
-
-			} else {
-				
-			}	
-		};
-
-		request.onerror = function() {
-		};
-
-		request.send();
-
+		updateSensorDisplay("cowo.outside.temperature", outsideGauge, $('#sensorOutsideLastUpdate'));
     }
 
-    
+    // SENSOR OUTSIDE
+    var stationConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
+    var stationGauge= loadLiquidFillGauge("sensorTemperatureGauge", 0.0, stationConfig);
+    function NewValueStation(){
+		updateSensorDisplay("cowo.inside3.temperature", stationGauge, $('#sensorTemperatureLastUpdate'));
+    }
+
     // SENSOR INSIDE HUMIDITY
-    var insideHumidityConfig = liquidFillGaugeDefaultSettings();
-	insideHumidityConfig.circleColor = "#6EA164";
-	insideHumidityConfig.textColor = textColor;
-	insideHumidityConfig.waveTextColor = textColor;
-	insideHumidityConfig.waveColor = "#5EB3DA";
-	insideHumidityConfig.circleThickness = 0.1;
-	insideHumidityConfig.circleFillGap = 0.2;
-	insideHumidityConfig.textVertPosition = 0.8;
+    var insideHumidityConfig = createGaugeConfig("#6EA164","#5EB3DA", true );
 	insideHumidityConfig.waveAnimateTime = 1100;
 	insideHumidityConfig.waveHeight = 0.12;
     var insideHumidityGauge= loadLiquidFillGauge("sensorInsideHumidityGauge", 0.0, insideHumidityConfig);
     
     function NewValueInsideHumidity(){
-        var request = new XMLHttpRequest();
-		request.open('GET', 'http://api.grundid.de/sensor?sensorName=cowo.inside3.humidity&size=1', true);
-	
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) {
-				var data = JSON.parse(request.responseText);
-				var sensorValue = data.content[0].value;
-				insideHumidityGauge.update(sensorValue);
-				$('#sensorHumidityLastUpdate').text(moment(data.content[0].date).format('LLLL'));
+		updateSensorDisplay("cowo.inside3.humidity", insideHumidityGauge, $('#sensorHumidityLastUpdate'));
+	}
 
-			} else {
-				
-			}	
-		};
+    var outsideHumidityConfig = createGaugeConfig("#6EA164","#5EB3DA", true );
+	outsideHumidityConfig.waveAnimateTime = 1100;
+	outsideHumidityConfig.waveHeight = 0.12;
+    var outsideHumidityGauge= loadLiquidFillGauge("sensorOutsideHumidityGauge", 0.0, outsideHumidityConfig);
 
-		request.onerror = function() {
-		};
-
-		request.send();
-    }
+    function NewValueOutsideHumidity(){
+		updateSensorDisplay("cowo.outside.humidity", outsideHumidityGauge, $('#sensorOutsideHumidityLastUpdate'));
+	}
 
 	function updateValues(){
 		NewValueNorth();
 		NewValueSouth();
 		NewValueOutside();
 		NewValueInsideHumidity();
+		NewValueOutsideHumidity();
+		NewValueStation();
 	}
 	updateValues();
 	setTimeout(updateValues, 1000 * 60 * 3);

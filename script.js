@@ -39,9 +39,7 @@ var svg = d3.select("#stats").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-
-d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.inside1.temperature,cowo.inside2.temperature&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
+d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.inside1.temperature,cowo.inside3.temperature&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
     if (error) throw error;
 
     var sensors = {};
