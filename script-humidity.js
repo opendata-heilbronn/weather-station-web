@@ -42,7 +42,7 @@ var svg = d3.select("#humiditystats").append("svg")
 
 
 
-d3.json("http://api.grundid.de/sensor?sensorName=cowo.inside3.humidity&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
+d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.humidity,cowo.raum5.humidity,cowo.raum12.humidity,cowo.raum14.humidity&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
     if (error) throw error;
 
     var sensors = {};
@@ -116,10 +116,11 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.inside3.humidity&size=9999
         });
 
 var sensorMapping = {
-    "cowo.inside2.temperature" : "Innen Nord",
-    "cowo.inside1.temperature" : "Innen Süd",
-    "cowo.outside.temperature" : "Außen"
-}
+    "cowo.raum2.humidity" : "Raum 2",
+    "cowo.raum5.humidity" : "Raum 5",
+    "cowo.raum12.humidity" : "Raum 12",
+    "cowo.raum14.humidity" : "Raum 14"
+};
 
 city.append("text")
         .datum(function (d) { return { name: d.name, value: d.values[0] }; })
@@ -127,15 +128,6 @@ city.append("text")
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function (d) { return sensorMapping[d.name]; });
-		
-
-  legend = svg.append("g")
-    .attr("class","legend")
-    .attr("transform","translate(50,30)")
-    .style("font-size","12px")
-    .call(d3.legend)
-
-
 
 });
 }

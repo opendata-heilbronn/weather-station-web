@@ -65,24 +65,24 @@
 			</div>
 			<div class="row">
 				<div class="col-md-3">
-					<svg id="sensorOutsideGauge" width="97%" height="250" onclick="NewValueOutside();"></svg>
-					<h3 style="font-family: PT Mono" class="text-center">Außen</h3>
-					<div id="sensorOutsideLastUpdate" class="text-center"></div>
+					<svg id="sensorRaum2Gauge" width="97%" height="250" onclick="updateRaum2();"></svg>
+					<h3 style="font-family: PT Mono" class="text-center">Raum 2 (NW)</h3>
+					<div id="sensorRaum2LastUpdate" class="text-center"></div>
 				</div>
 				<div class="col-md-3">
-					<svg id="sensorSouthGauge" width="97%" height="250" onclick="NewValueSouth();"></svg>
-					<h3 style="font-family: PT Mono" class="text-center">Innen (Süd)</h3>
-					<div id="sensorSouthLastUpdate" class="text-center"></div>
+					<svg id="sensorRaum5Gauge" width="97%" height="250" onclick="updateRaum5();"></svg>
+					<h3 style="font-family: PT Mono" class="text-center">Raum 5 (W)</h3>
+					<div id="sensorRaum5LastUpdate" class="text-center"></div>
 				</div>
 				<div class="col-md-3">
-					<svg id="sensorNorthGauge" width="97%" height="250" onclick="NewValueNorth();"></svg>
-					<h3 style="font-family: PT Mono" class="text-center">Innen (Nord)</h3>
-					<div id="sensorNorthLastUpdate" class="text-center"></div>
+					<svg id="sensorRaum12Gauge" width="97%" height="250" onclick="updateRaum12();"></svg>
+					<h3 style="font-family: PT Mono" class="text-center">Raum 12 (SO)</h3>
+					<div id="sensorRaum12LastUpdate" class="text-center"></div>
 				</div>
 				<div class="col-md-3">
-					<svg id="sensorTemperatureGauge" width="97%" height="250" onclick="NewValueTempSensor();"></svg>
-					<h3 style="font-family: PT Mono" class="text-center">Station</h3>
-					<div id="sensorTemperatureLastUpdate" class="text-center"></div>
+					<svg id="sensorRaum14Gauge" width="97%" height="250" onclick="updateRaum14();"></svg>
+					<h3 style="font-family: PT Mono" class="text-center">Raum 14 (O)</h3>
+					<div id="sensorRaum14LastUpdate" class="text-center"></div>
 				</div>
 			</div>
 		</div>
@@ -94,15 +94,25 @@
 				<h2 class="text-center">Luftfeuchtigkeit</h2>
 			</div>
 			<div class="row">
-				<div class="col-md-6">
-					<svg id="sensorInsideHumidityGauge" width="97%" height="200" onclick="NewValueInsideHumidity();"></svg>
-					<h3 style="font-family: 'PT Mono'" class="text-center">Innen</h3>
-					<div id="sensorHumidityLastUpdate" class="text-center"></div>
+				<div class="col-md-3">
+					<svg id="sensorRaum2HumidityGauge" width="97%" height="200" onclick="updateHumidityRaum2();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Raum 2</h3>
+					<div id="sensorRaum2HumidityLastUpdate" class="text-center"></div>
 				</div>
-				<div class="col-md-6">
-					<svg id="sensorOutsideHumidityGauge" width="97%" height="200" onclick="NewValueOutsideHumidity();"></svg>
-					<h3 style="font-family: 'PT Mono'" class="text-center">Außen</h3>
-					<div id="sensorOutsideHumidityLastUpdate" class="text-center"></div>
+				<div class="col-md-3">
+					<svg id="sensorRaum5HumidityGauge" width="97%" height="200" onclick="updateHumidityRaum5();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Raum 5</h3>
+					<div id="sensorRaum5HumidityLastUpdate" class="text-center"></div>
+				</div>
+				<div class="col-md-3">
+					<svg id="sensorRaum12HumidityGauge" width="97%" height="200" onclick="updateHumidityRaum12();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Raum 12</h3>
+					<div id="sensorRaum12HumidityLastUpdate" class="text-center"></div>
+				</div>
+				<div class="col-md-3">
+					<svg id="sensorRaum14HumidityGauge" width="97%" height="200" onclick="updateHumidityRaum14();"></svg>
+					<h3 style="font-family: 'PT Mono'" class="text-center">Raum 14</h3>
+					<div id="sensorRaum14HumidityLastUpdate" class="text-center"></div>
 				</div>
 			</div>
 		</div>
@@ -115,28 +125,6 @@
 			</div>
 			<div class="row">
 				<div id="stats" class="col-md-12">
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="section" id="dust-statistik">
-		<div class="container">
-			<div class="row" style="margin-bottom: 20px">
-				<h2 class="text-center">Staub-Statistiken (Color Laser Jet Enterprise M553) <small>(letzte Woche)</small></h2>
-			</div>
-			<div class="row">
-				<div id="duststats" class="col-md-12">
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="section" id="dust-statistik-today">
-		<div class="container">
-			<div class="row" style="margin-bottom: 20px">
-				<h2 class="text-center">Staub-Statistiken (Color Laser Jet Enterprise M553) <small>(letzte Woche, pro Tag)</small></h2>
-			</div>
-			<div class="row">
-				<div id="duststatstoday" class="col-md-12">
 				</div>
 			</div>
 		</div>
@@ -179,71 +167,66 @@
 		gaugeConfig.circleThickness = 0.1;
 		gaugeConfig.circleFillGap = 0.2;
 		gaugeConfig.textVertPosition = 0.8;
-		gaugeConfig.waveAnimateTime = 1200;
-		gaugeConfig.waveHeight = 0.08;
+		if (displayPercent) {
+			gaugeConfig.waveAnimateTime = 1100;
+			gaugeConfig.waveHeight = 0.12;
+		} else {
+			gaugeConfig.waveAnimateTime = 1200;
+			gaugeConfig.waveHeight = 0.08;
+		}
 		gaugeConfig.displayPercent = displayPercent;
 		return gaugeConfig;
 	}
 
-	// SENSOR NORTH
-    var northConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
-    var northGauge= loadLiquidFillGauge("sensorNorthGauge", 0.0, northConfig);
-	function NewValueNorth(){
-		updateSensorDisplay("cowo.inside2.temperature", northGauge, $('#sensorNorthLastUpdate'));
+    var raum2Gauge= loadLiquidFillGauge("sensorRaum2Gauge", 0.0, createGaugeConfig("#5DCFDC","#DADC5D", false ));
+	function updateRaum2(){
+		updateSensorDisplay("cowo.raum2.temperature", raum2Gauge, $('#sensorRaum2LastUpdate'));
     }
-    // SENSOR SOUTH
-    var southConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
-    var southGauge= loadLiquidFillGauge("sensorSouthGauge", 0.0, southConfig);
-    function NewValueSouth(){
-		updateSensorDisplay("cowo.inside1.temperature", southGauge, $('#sensorSouthLastUpdate'));
+    var raum5Gauge= loadLiquidFillGauge("sensorRaum5Gauge", 0.0, createGaugeConfig("#5DCFDC","#DADC5D", false ));
+    function updateRaum5(){
+		updateSensorDisplay("cowo.raum5.temperature", raum5Gauge, $('#sensorRaum5LastUpdate'));
     }
 
-    // SENSOR OUTSIDE
-    var outsideConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
-    var outsideGauge= loadLiquidFillGauge("sensorOutsideGauge", 0.0, outsideConfig);
-    function NewValueOutside(){
-		updateSensorDisplay("cowo.outside.temperature", outsideGauge, $('#sensorOutsideLastUpdate'));
+    var raum12Gauge= loadLiquidFillGauge("sensorRaum12Gauge", 0.0, createGaugeConfig("#5DCFDC","#DADC5D", false ));
+    function updateRaum12(){
+		updateSensorDisplay("cowo.raum12.temperature", raum12Gauge, $('#sensorRaum12LastUpdate'));
     }
 
-    // SENSOR OUTSIDE
-    var stationConfig = createGaugeConfig("#5DCFDC","#DADC5D", false );
-    var stationGauge= loadLiquidFillGauge("sensorTemperatureGauge", 0.0, stationConfig);
-    function NewValueStation(){
-		updateSensorDisplay("cowo.inside3.temperature", stationGauge, $('#sensorTemperatureLastUpdate'));
+    var raum14Gauge= loadLiquidFillGauge("sensorRaum14Gauge", 0.0, createGaugeConfig("#5DCFDC","#DADC5D", false ));
+    function updateRaum14(){
+		updateSensorDisplay("cowo.raum14.temperature", raum14Gauge, $('#sensorRaum14LastUpdate'));
     }
 
-    // SENSOR INSIDE HUMIDITY
-    var insideHumidityConfig = createGaugeConfig("#6EA164","#5EB3DA", true );
-	insideHumidityConfig.waveAnimateTime = 1100;
-	insideHumidityConfig.waveHeight = 0.12;
-    var insideHumidityGauge= loadLiquidFillGauge("sensorInsideHumidityGauge", 0.0, insideHumidityConfig);
-    
-    function NewValueInsideHumidity(){
-		updateSensorDisplay("cowo.inside3.humidity", insideHumidityGauge, $('#sensorHumidityLastUpdate'));
+    var raum2HumidityGauge= loadLiquidFillGauge("sensorRaum2HumidityGauge", 0.0, createGaugeConfig("#6EA164","#5EB3DA", true ));
+    function updateHumidityRaum2(){
+		updateSensorDisplay("cowo.raum2.humidity", raum2HumidityGauge, $('#sensorRaum2HumidityLastUpdate'));
 	}
-
-    var outsideHumidityConfig = createGaugeConfig("#6EA164","#5EB3DA", true );
-	outsideHumidityConfig.waveAnimateTime = 1100;
-	outsideHumidityConfig.waveHeight = 0.12;
-    var outsideHumidityGauge= loadLiquidFillGauge("sensorOutsideHumidityGauge", 0.0, outsideHumidityConfig);
-
-    function NewValueOutsideHumidity(){
-		updateSensorDisplay("cowo.outside.humidity", outsideHumidityGauge, $('#sensorOutsideHumidityLastUpdate'));
+    var raum5HumidityGauge= loadLiquidFillGauge("sensorRaum5HumidityGauge", 0.0, createGaugeConfig("#6EA164","#5EB3DA", true ));
+    function updateHumidityRaum5(){
+		updateSensorDisplay("cowo.raum5.humidity", raum5HumidityGauge, $('#sensorRaum5HumidityLastUpdate'));
+	}
+    var raum12HumidityGauge= loadLiquidFillGauge("sensorRaum12HumidityGauge", 0.0, createGaugeConfig("#6EA164","#5EB3DA", true ));
+    function updateHumidityRaum12(){
+		updateSensorDisplay("cowo.raum12.humidity", raum12HumidityGauge, $('#sensorRaum12HumidityLastUpdate'));
+	}
+    var raum14HumidityGauge= loadLiquidFillGauge("sensorRaum14HumidityGauge", 0.0, createGaugeConfig("#6EA164","#5EB3DA", true ));
+    function updateHumidityRaum14(){
+		updateSensorDisplay("cowo.raum14.humidity", raum14HumidityGauge, $('#sensorRaum14HumidityLastUpdate'));
 	}
 
 	function updateValues(){
-		NewValueNorth();
-		NewValueSouth();
-		NewValueOutside();
-		NewValueInsideHumidity();
-		NewValueOutsideHumidity();
-		NewValueStation();
+		updateRaum2();
+		updateRaum5();
+		updateRaum12();
+		updateRaum14();
+		updateHumidityRaum2();
+		updateHumidityRaum5();
+		updateHumidityRaum12();
+		updateHumidityRaum14();
 	}
 	updateValues();
 	setTimeout(updateValues, 1000 * 60 * 3);
 </script>
 <script src="script.js"></script>
-<script src="script-dust.js"></script>
-<script src="script-dust-yesterday.js"></script>
 <script src="script-humidity.js"></script>
 </body></html>

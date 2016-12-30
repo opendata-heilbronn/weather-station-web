@@ -39,7 +39,7 @@ var svg = d3.select("#stats").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.inside1.temperature,cowo.inside3.temperature&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
+d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.temperature,cowo.raum5.temperature,cowo.raum12.temperature,cowo.raum14.temperature&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
     if (error) throw error;
 
     var sensors = {};
@@ -113,10 +113,11 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.outside.temperature,cowo.i
         });
 
 var sensorMapping = {
-    "cowo.inside2.temperature" : "Innen Nord",
-    "cowo.inside1.temperature" : "Innen Süd",
-    "cowo.outside.temperature" : "Außen"
-}
+    "cowo.raum2.temperature" : "Raum 2",
+    "cowo.raum5.temperature" : "Raum 5",
+    "cowo.raum12.temperature" : "Raum 12",
+    "cowo.raum14.temperature" : "Raum 14"
+};
 
 city.append("text")
         .datum(function (d) { return { name: d.name, value: d.values[0] }; })
