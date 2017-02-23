@@ -1,3 +1,5 @@
+var averagingFactor = 200; //the amount of points that get averaged into one
+
 function humidityStatistics() {
 	var margin = { top: 20, right: 80, bottom: 30, left: 50 },
     totalWidth = 960,
@@ -29,7 +31,7 @@ var line = d3.svg.line()
         return x(d.date);
     })
     .y(function (d) {
-        return y(d.temperature);
+        return y(d.humidity);
     });
 
 var svg = d3.select("#humiditystats").append("svg")
@@ -59,15 +61,39 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.humidity,cowo.raum5.
 
         data.content.forEach(function (element) {
             if (name == element.sensorName) {
-                values.push({ date: element.date, temperature: element.value });
+                values.push({ date: element.date, humidity: element.value });
             }
         });
 
+        //generate rolling average
+        var valuesMean = [];
+        for(var i = 0; i < values.length; i++) { //loop through all values
+            var avgCount = 1;
+            var mean = values[i].humidity;
+
+            for(var j = 1; j <= averagingFactor/2; j++) {
+                if(i+j < values.length) {
+                    mean += values[i+j].humidity;
+                    avgCount++;
+                }
+                if(i-j >= 0) {
+                    mean += values[i-j].humidity;
+                    avgCount++;
+                }
+            }
+
+            mean /= avgCount;
+            valuesMean[i] = values[i];
+            valuesMean[i].humidity = mean;
+        }
+
         return {
             name: name,
-            values: values
+            values: valuesMean
         };
     });
+
+
 
     x.domain(d3.extent(data.content, function (d) {
         return d.date;
@@ -76,12 +102,12 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.humidity,cowo.raum5.
     y.domain([
         d3.min(tempSensors, function (c) {
             return d3.min(c.values, function (v) {
-                return v.temperature;
+                return v.humidity;
             });
         }),
         d3.max(tempSensors, function (c) {
             return d3.max(c.values, function (v) {
-                return v.temperature;
+                return v.humidity;
             });
         })
     ]);
@@ -124,7 +150,7 @@ var sensorMapping = {
 
 city.append("text")
         .datum(function (d) { return { name: d.name, value: d.values[0] }; })
-        .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+        .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.humidity) + ")"; })
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function (d) { return sensorMapping[d.name]; });
