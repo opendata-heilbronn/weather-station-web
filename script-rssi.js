@@ -133,7 +133,7 @@ function rssiStatistics() {
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("%");
+            .text("dBm");
 
         var city = svg.selectAll(".city")
             .data(tempSensors)
