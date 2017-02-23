@@ -52,7 +52,7 @@ for (var roomNo = 1; roomNo <= 14;roomNo++) {
     sensorMapping[sensorName] = "Raum "+roomNo;
 }
 
-d3.json("http://api.grundid.de/sensor?sensorName="+sensorNames+"&size=99999999&from=" + moment().subtract(7, 'days').format('x'), function (error, data) {
+d3.json("http://api.grundid.de/sensor?sensorName="+sensorNames+"&size=99999999&from=" + moment().subtract(1, 'days').format('x'), function (error, data) {
     if (error) throw error;
 
     var sensors = {};
