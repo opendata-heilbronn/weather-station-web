@@ -1,4 +1,4 @@
-var averagingFactor = 24; //the amount of points that get averaged into one
+var rssiAveragingFactor = 24; //the amount of points that get averaged into one
 
 function rssiStatistics() {
 	var margin = { top: 20, right: 80, bottom: 30, left: 50 },
@@ -81,7 +81,7 @@ d3.json("http://api.grundid.de/sensor?sensorName="+sensorNames+"&size=99999999&f
             var avgCount = 1;
             var mean = values[i].rssi;
 
-            for(var j = 1; j <= averagingFactor/2; j++) {
+            for(var j = 1; j <= rssiAveragingFactor/2; j++) {
                 if(i+j < values.length) {
                     mean += values[i+j].rssi;
                     avgCount++;

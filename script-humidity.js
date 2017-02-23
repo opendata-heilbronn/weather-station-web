@@ -1,4 +1,4 @@
-var averagingFactor = 200; //the amount of points that get averaged into one
+var humidityAveragingFactor = 200; //the amount of points that get averaged into one
 
 function humidityStatistics() {
 	var margin = { top: 20, right: 80, bottom: 30, left: 50 },
@@ -71,7 +71,7 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.humidity,cowo.raum5.
             var avgCount = 1;
             var mean = values[i].humidity;
 
-            for(var j = 1; j <= averagingFactor/2; j++) {
+            for(var j = 1; j <= humidityAveragingFactor/2; j++) {
                 if(i+j < values.length) {
                     mean += values[i+j].humidity;
                     avgCount++;
