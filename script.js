@@ -1,4 +1,8 @@
-var margin = { top: 20, right: 80, bottom: 30, left: 50 },
+var temperatureAveragingFactor = 50;
+
+function temperatureStatistics() {
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
     totalWidth = 960,
     totalHeight = 500,
     width = totalWidth - margin.left - margin.right,
@@ -56,13 +60,35 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.temperature,cowo.rau
 
         data.content.forEach(function (element) {
             if (name == element.sensorName) {
-                values.push({ date: element.date, temperature: element.value });
+                values.push({date: element.date, temperature: element.value});
             }
         });
 
+        //generate rolling average
+        var valuesMean = [];
+        for (var i = 0; i < values.length; i++) { //loop through all values
+            var avgCount = 1;
+            var mean = values[i].temperature;
+
+            for (var j = 1; j <= temperatureAveragingFactor / 2; j++) {
+                if (i + j < values.length) {
+                    mean += values[i + j].temperature;
+                    avgCount++;
+                }
+                if (i - j >= 0) {
+                    mean += values[i - j].temperature;
+                    avgCount++;
+                }
+            }
+
+            mean /= avgCount;
+            valuesMean[i] = values[i];
+            valuesMean[i].temperature = mean;
+        }
+
         return {
             name: name,
-            values: values
+            values: valuesMean
         };
     });
 
@@ -112,20 +138,27 @@ d3.json("http://api.grundid.de/sensor?sensorName=cowo.raum2.temperature,cowo.rau
             return color(d.name);
         });
 
-var sensorMapping = {
-    "cowo.raum2.temperature" : "Raum 2",
-    "cowo.raum5.temperature" : "Raum 5",
-    "cowo.raum12.temperature" : "Raum 12",
-    "cowo.raum14.temperature" : "Raum 14"
-};
+    var sensorMapping = {
+        "cowo.raum2.temperature": "Raum 2",
+        "cowo.raum5.temperature": "Raum 5",
+        "cowo.raum12.temperature": "Raum 12",
+        "cowo.raum14.temperature": "Raum 14"
+    };
 
-city.append("text")
-        .datum(function (d) { return { name: d.name, value: d.values[0] }; })
-        .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+    city.append("text")
+        .datum(function (d) {
+            return {name: d.name, value: d.values[0]};
+        })
+        .attr("transform", function (d) {
+            return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")";
+        })
         .attr("x", 3)
         .attr("dy", ".35em")
-        .text(function (d) { return sensorMapping[d.name]; });
-
-
+        .text(function (d) {
+            return sensorMapping[d.name];
+        });
 
 });
+
+}
+temperatureStatistics();
