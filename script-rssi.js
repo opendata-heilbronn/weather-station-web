@@ -1,3 +1,5 @@
+var averagingFactor = 24; //the amount of points that get averaged into one
+
 function rssiStatistics() {
 	var margin = { top: 20, right: 80, bottom: 30, left: 50 },
     totalWidth = 960,
@@ -29,7 +31,7 @@ var line = d3.svg.line()
         return x(d.date);
     })
     .y(function (d) {
-        return y(d.temperature);
+        return y(d.rssi);
     });
 
 var svg = d3.select("#rssistats").append("svg")
@@ -69,9 +71,31 @@ d3.json("http://api.grundid.de/sensor?sensorName="+sensorNames+"&size=99999999&f
 
         data.content.forEach(function (element) {
             if (name == element.sensorName) {
-                values.push({ date: element.date, temperature: element.value });
+                values.push({ date: element.date, rssi: element.value });
             }
         });
+
+        //generate rolling average
+        var valuesMean = [];
+        for(var i = 0; i < values.length; i++) { //loop through all values
+            var avgCount = 1;
+            var mean = values[i].rssi;
+
+            for(var j = 1; j <= averagingFactor/2; j++) {
+                if(i+j < values.length) {
+                    mean += values[i+j].rssi;
+                    avgCount++;
+                }
+                if(i-j >= 0) {
+                    mean += values[i-j].rssi;
+                    avgCount++;
+                }
+            }
+
+            mean /= avgCount;
+            valuesMean[i] = values[i];
+            valuesMean[i].rssi = mean;
+        }
 
         return {
             name: name,
@@ -86,12 +110,12 @@ d3.json("http://api.grundid.de/sensor?sensorName="+sensorNames+"&size=99999999&f
     y.domain([
         d3.min(tempSensors, function (c) {
             return d3.min(c.values, function (v) {
-                return v.temperature;
+                return v.rssi;
             });
         }),
         d3.max(tempSensors, function (c) {
             return d3.max(c.values, function (v) {
-                return v.temperature;
+                return v.rssi;
             });
         })
     ]);
@@ -127,7 +151,7 @@ d3.json("http://api.grundid.de/sensor?sensorName="+sensorNames+"&size=99999999&f
 
 city.append("text")
         .datum(function (d) { return { name: d.name, value: d.values[0] }; })
-        .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+        .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.rssi) + ")"; })
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function (d) { return sensorMapping[d.name]; });
